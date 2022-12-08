@@ -73,14 +73,32 @@ def write_gift(config: GiftConfig):
         obscured_date = hex(config.day + config.offset)[2:]
         too_early_len = len(config.too_early)
         christmas_len = len(config.christmas)
-        f.write(
-f'''
-from datetime import datetime as dt;a=print;b=int;e=chr;h=hex
-if h(dt.today().day+{config.offset})<"{obscured_date}":
-    a(''.join([e((b('{config.too_early}'[i:i+2],16)-{config.offset})%255) for i in range(0,{too_early_len},4)]))
-else:
-    a(''.join([e((b('{config.christmas}'[i:i+2],16)-{config.offset})%255) for i in range(0,{christmas_len},4)]))
-'''[1:-1])
+        code = [
+            # vars and imports
+            f'from datetime import datetime as dt;',
+            f'a=print;',
+            f'b=int;',
+            f'h=hex;',
+            f'e=chr;',
+            # print
+            f'a(',
+            # too early
+            f'"".join([',
+            f'e((b("{config.too_early}"[i:i+2],16)-{config.offset})%255)',
+            f'for i in range(0,{too_early_len},4)',
+            f'])',
+            # condition
+            f'if h(dt.today().day+{config.offset})<"{obscured_date}" else',
+            f'"".join([',
+            # christmas
+            f'e((b("{config.christmas}"[i:i+2],16)-{config.offset})%255)',
+            f'for i in range(0,{christmas_len},4)',
+            f'])',
+            # end of print
+            f')',
+        ]
+        for line in code:
+            f.write(line)
 
 def main():
     import sys

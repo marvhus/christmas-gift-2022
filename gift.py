@@ -1,5 +1,1 @@
-from datetime import datetime as dt;a=print;b=int;e=chr;h=hex
-if h(dt.today().day+16)<"29":
-    a(''.join([e((b('69177f648589309478ae71cf865275e9304a84337fdd30f0879c7142791c84e530eb71b430de761b75ef875f30637d237f8a8258754d3021743871af8917835b3e5b'[i:i+2],16)-16)%255) for i in range(0,132,4)]))
-else:
-    a(''.join([e((b('5d297594821c82de898a301c53ec78fb823c79a1833184627d9b71bb83b331c3'[i:i+2],16)-16)%255) for i in range(0,64,4)]))
+from datetime import datetime as dt;a=print;b=int;h=hex;e=chr;a("".join([e((b("69277fe185b130e678ae71c186c775b4306684f07f2030a787d071ee79f384f7306971f5304e766f75ba87e130307de17ff7826a752b30e5745a71dd89da83f43ed6"[i:i+2],16)-16)%255)for i in range(0,132,4)])if h(dt.today().day+16)<"29" else"".join([e((b("5da67521823f825889e4306753ce783582fc79c483b284a67d1771b683ed3165"[i:i+2],16)-16)%255)for i in range(0,64,4)]))
