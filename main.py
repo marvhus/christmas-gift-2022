@@ -4,10 +4,14 @@ class GiftConfig:
         self.christmas = ""
         # Default day is the 24th of December
         self.day = 24
+        self.offset = 19
 
-def obscure_message(text: str) -> str:
-    with open('gift.py', 'wt') as file:
-        pass
+def obscure_message(text: str, offset: int) -> str:
+    # TODO: add offset setting to config file
+    out = [hex(ord(c) + offset)
+        for c in text
+    ]
+    return out
     
 def parse_config(path: str) -> GiftConfig:
     config = GiftConfig()
@@ -67,6 +71,8 @@ def main():
         exit(1)
     # first arg should be a path to a config
     config = parse_config(args[0])
+    obscured = obscure_message(config.too_early, config.offset)
+    print(obscured)
 
 if __name__ == '__main__': main()         
 
