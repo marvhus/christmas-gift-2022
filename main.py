@@ -14,7 +14,6 @@ def obscure_message(text: str, offset: int) -> str:
             for c in text
         ]
     )
-    print(out)
     return out
     
 def parse_config(path: str) -> GiftConfig:
@@ -76,12 +75,11 @@ def write_gift(config: GiftConfig):
         christmas_len = len(config.christmas)
         f.write(
 f'''
-from datetime import datetime as dt;a=print;b=int;e=chr
-if hex(dt.today().day+{config.offset})<"{obscured_date}":
-    for i in range(0,{too_early_len},4):
-        print(chr((int('{config.too_early}'[i:i+2],16)-{config.offset})%255), end='')
+from datetime import datetime as dt;a=print;b=int;e=chr;h=hex
+if h(dt.today().day+{config.offset})<"{obscured_date}":
+    a(''.join([e((b('{config.too_early}'[i:i+2],16)-{config.offset})%255) for i in range(0,{too_early_len},4)]))
 else:
-    a(''.join([chr((int('{config.christmas}'[i:i+2],16)-{config.offset})%255) for i in range(0,{christmas_len},4)]))
+    a(''.join([e((b('{config.christmas}'[i:i+2],16)-{config.offset})%255) for i in range(0,{christmas_len},4)]))
 '''[1:-1])
 
 def main():
@@ -98,4 +96,3 @@ def main():
     
 
 if __name__ == '__main__': main()         
-
