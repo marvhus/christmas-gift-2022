@@ -8,9 +8,12 @@ class GiftConfig:
 
 def obscure_message(text: str, offset: int) -> str:
     # TODO: add offset setting to config file
-    out = [hex(ord(c) + offset)
-        for c in text
-    ]
+    out = ''.join(
+        [
+            hex(ord(c) + offset)[2:]
+            for c in text
+        ]
+    )
     return out
     
 def parse_config(path: str) -> GiftConfig:
@@ -23,6 +26,7 @@ def parse_config(path: str) -> GiftConfig:
         ]
         valid_setting = [
             'day',
+            'offset',
         ]
         clear_text = []
         for line in lines:
@@ -47,6 +51,8 @@ def parse_config(path: str) -> GiftConfig:
                     (name, val) = setting
                     if name == 'day':
                         config.day = int(val)
+                    elif name == 'offset':
+                        config.offset = int(val)
                     # TODO: add more settings
                 continue
             # Add line as plaintext (ignore empty line)
@@ -62,6 +68,8 @@ def parse_config(path: str) -> GiftConfig:
 
     return config
 
+def write_gift(config: GiftConfig):
+    pass
 
 def main():
     import sys
@@ -71,8 +79,8 @@ def main():
         exit(1)
     # first arg should be a path to a config
     config = parse_config(args[0])
-    obscured = obscure_message(config.too_early, config.offset)
-    print(obscured)
+    config.too_early = obscure_message(config.too_early, config.offset)
+    config.christmas = obscure_message(config.christmas, config.offset)
 
 if __name__ == '__main__': main()         
 
