@@ -91,7 +91,7 @@ else:
     for i in range(0, {christmas_len}, 2):
         c += e(b(d[i:i+2], 16) - {config.offset})
     a(c)
-''')
+'''[1:-1])
 
 def main():
     import sys
