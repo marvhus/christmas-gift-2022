@@ -69,7 +69,29 @@ def parse_config(path: str) -> GiftConfig:
     return config
 
 def write_gift(config: GiftConfig):
-    pass
+    with open('gift.py', 'wt') as f:
+        obscured_date = hex(config.day + config.offset)[2:]
+        too_early_len = len(config.too_early)
+        christmas_len = len(config.christmas)
+        f.write(
+f'''
+from datetime import datetime as dt
+a=print
+b=int
+e=chr
+if hex(dt.today().day+{config.offset}) < "{obscured_date}":
+    c=''
+    d='{config.too_early}'
+    for i in range(0, {too_early_len}, 2):
+        c += e(b(d[i:i+2], 16) - {config.offset})
+    a(c)
+else:
+    c=''
+    d='{config.christmas}'
+    for i in range(0, {christmas_len}, 2):
+        c += e(b(d[i:i+2], 16) - {config.offset})
+    a(c)
+''')
 
 def main():
     import sys
@@ -81,6 +103,8 @@ def main():
     config = parse_config(args[0])
     config.too_early = obscure_message(config.too_early, config.offset)
     config.christmas = obscure_message(config.christmas, config.offset)
+    write_gift(config)
+    
 
 if __name__ == '__main__': main()         
 
