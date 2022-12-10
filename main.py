@@ -88,7 +88,7 @@ def write_gift(config: GiftConfig):
             f'for i in range(0,{too_early_len},4)',
             f'])',
             # condition
-            f'if h(dt.today().day+{config.offset})>"{obscured_date}" else',
+            f'if h(dt.today().day+{config.offset})<"{obscured_date}" else',
             f'"".join([',
             # christmas
             f'e((b("{config.christmas}"[i:i+2],16)-{config.offset})%255)',
@@ -99,6 +99,7 @@ def write_gift(config: GiftConfig):
         ]
         f.write('#!/bin/env python3\n')
         f.write('# Made by Mart\n')
+        f.write("# Please don't mess with my code.\n")
         for line in code:
             f.write(line)
 
