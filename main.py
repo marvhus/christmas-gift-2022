@@ -93,6 +93,8 @@ def write_gift(config: GiftConfig):
             # christmas
             f'e((b("{config.christmas}"[i:i+2],16)-{config.offset})%255)',
             f'for i in range(0,{christmas_len},4)',
+            # extra condition to prevent tampering
+            f'if h(dt.today().day+{config.offset})>"{obscured_date}"'
             f'])',
             # end of print
             f')',
