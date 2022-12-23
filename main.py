@@ -5,6 +5,7 @@ class GiftConfig:
         # Default day is the 24th of December
         self.day = 24
         self.offset = 19
+        self.time = 6
 
 def obscure_message(text: str, offset: int) -> str:
     import random
@@ -27,6 +28,7 @@ def parse_config(path: str) -> GiftConfig:
         valid_setting = [
             'day',
             'offset',
+            'time',
         ]
         clear_text = []
         for line in lines:
@@ -53,6 +55,8 @@ def parse_config(path: str) -> GiftConfig:
                         config.day = int(val)
                     elif name == 'offset':
                         config.offset = int(val)
+                    elif name == 'time':
+                        config.time = int(val)
                     # TODO: add more settings
                 continue
             # Add line as plaintext (ignore empty line)
@@ -71,6 +75,7 @@ def parse_config(path: str) -> GiftConfig:
 def write_gift(config: GiftConfig):
     with open('gift.py', 'wt') as f:
         obscured_date = hex(config.day + config.offset)[2:]
+        obscured_time = hex(config.time + config.offset)[2:]
         too_early_len = len(config.too_early)
         christmas_len = len(config.christmas)
         code = [
@@ -82,19 +87,19 @@ def write_gift(config: GiftConfig):
             f'e=chr;',
             # print
             f'a(',
+            # christmas
+            f'"".join([',
+            f'e((b("{config.christmas}"[i:i+2],16)-{config.offset})%255)',
+            f'for i in range(0,{christmas_len},4)',
+            f'])',
+            # condition
+            f'if h(dt.now().day+{config.offset})[2:]>="{obscured_date}" ',
+            f'and h(b(dt.now().strftime("%H"))+{config.offset})[2:]>="{obscured_time}" ',
+            f'else',
             # too early
             f'"".join([',
             f'e((b("{config.too_early}"[i:i+2],16)-{config.offset})%255)',
             f'for i in range(0,{too_early_len},4)',
-            f'])',
-            # condition
-            f'if h(dt.today().day+{config.offset})<"{obscured_date}" else',
-            f'"".join([',
-            # christmas
-            f'e((b("{config.christmas}"[i:i+2],16)-{config.offset})%255)',
-            f'for i in range(0,{christmas_len},4)',
-            # extra condition to prevent tampering
-            f'if h(dt.today().day+{config.offset})>"{obscured_date}"'
             f'])',
             # end of print
             f')',
